@@ -3,7 +3,7 @@ package com.douzon.mysite.action.user;
 import com.douzon.mvc.action.AbstractActionFactory;
 import com.douzon.mvc.action.Action;
 import com.douzon.mysite.action.main.IndexAction;
-import com.douzon.mysite.action.user.LoginformAction;
+
 public class UserActionFactory extends AbstractActionFactory {
 
 	@Override
@@ -19,10 +19,18 @@ public class UserActionFactory extends AbstractActionFactory {
 		} 
 		else if ("loginform".equals(actionName)) {
 			action=new LoginformAction();
-		} else {
+		} else if ("login".equals(actionName)) {
+			action=new LoginAction();
+		}else if ("logout".equals(actionName)) {
+			action=new LogoutAction();
+		}else if ("modifyform".equals(actionName)) {
+			action=new ModifyFormAction();
+		}else if ("modify".equals(actionName)) {
+			action=new ModifyAction();
+		}else {
 			action = new IndexAction();
 		}
 		return action;
 	}
-
+	
 }
