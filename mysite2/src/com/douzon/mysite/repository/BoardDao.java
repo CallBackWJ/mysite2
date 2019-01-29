@@ -21,15 +21,16 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs;
 
-		if(kwd==null)
-			kwd="";
+		if (kwd == null)
+			kwd = "";
 		try {
 			conn = getConnection();
-			String sql = "select * from board where title like '%"+kwd+"%' or contents like '%"+kwd+"%' order by g_no desc, o_no asc limit ?,?";
+			String sql = "select * from board where title like '%" + kwd + "%' or contents like '%" + kwd
+					+ "%' order by g_no desc, o_no asc limit ?,?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setLong(1, (page*5)-5);
+			pstmt.setLong(1, (page * 5) - 5);
 			pstmt.setLong(2, 5);
-			
+
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				long no = rs.getLong(1);
@@ -134,7 +135,7 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql1);
 			pstmt.setLong(1, no);
 			pstmt.executeUpdate();
-			
+
 			String sql2 = "select * from board where no=?";
 			pstmt = conn.prepareStatement(sql2);
 			pstmt.setLong(1, no);
@@ -210,50 +211,12 @@ public class BoardDao {
 		boolean result = false;
 		try {
 			conn = getConnection();
-			String sql ="update board set title=? , contents=? where no=?";
+			String sql = "update board set title=? , contents=? where no=?";
 			pstmt = conn.prepareStatement(sql);
-			
+
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContents());
 			pstmt.setLong(3, vo.getNo());
-			
-			int count = pstmt.executeUpdate();
-			result = count == 1;
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(pstmt != null) {
-					pstmt.close();
-				}
-				if(conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
-
-	public boolean reply(BoardVo vo) {
-		// TODO Auto-generated method stub
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		boolean result = false;
-		try {
-			conn = getConnection();
-			String sql = "insert into board values(null,?,?,now(),0,?,ifnull((select MAX(b.o_no)+1 from board b where g_no=?),1),?,?)";
-			pstmt = conn.prepareStatement(sql);
-
-			pstmt.setString(1, "RE:"+vo.getTitle());
-			pstmt.setString(2, vo.getContents());
-			pstmt.setLong(3, vo.getG_no());
-			pstmt.setLong(4, vo.getG_no());
-			pstmt.setLong(5, vo.getDepth()+1);
-			pstmt.setLong(6, vo.getUser().getNo());
-		
-			
 
 			int count = pstmt.executeUpdate();
 			result = count == 1;
@@ -274,6 +237,66 @@ public class BoardDao {
 		return result;
 	}
 
+	public boolean reply(BoardVo vo) {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String check = null;
+		boolean result = false;
+		try {
+			conn = getConnection();
+			String sql1 = "select if((select count(*) from board b where g_no=? and o_no=?) = 0,'true','false')";
+			String sql2 = "update board set o_no=o_no+1 where g_no= ? and o_no>= ?";
+			String sql3 = "insert into board values(null,?,?,now(),0,?,?,?,?)";
+
+			pstmt = conn.prepareStatement(sql1);
+			pstmt.setLong(1, vo.getG_no());
+			pstmt.setLong(2, vo.getO_no());
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				
+				check = rs.getString(1);
+				System.out.println(check);
+			}
+			if ("false".equals(check)) {
+				pstmt = conn.prepareStatement(sql2);
+				pstmt.setLong(1, vo.getG_no());
+				pstmt.setLong(2, vo.getO_no()+1);
+				pstmt.executeUpdate();
+			}
+
+			pstmt = conn.prepareStatement(sql3);
+
+			pstmt.setString(1, "RE:" + vo.getTitle());
+			pstmt.setString(2, vo.getContents());
+			pstmt.setLong(3, vo.getG_no());
+			pstmt.setLong(4, vo.getO_no() + 1);
+			pstmt.setLong(5, vo.getDepth() + 1);
+			pstmt.setLong(6, vo.getUser().getNo());
+
+			int count = pstmt.executeUpdate();
+			result = count == 1;
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
 	public int getCount() {
 		List<BoardVo> list = new ArrayList<BoardVo>();
 		Connection conn = null;
@@ -284,11 +307,10 @@ public class BoardDao {
 			conn = getConnection();
 			String sql = "select * from board";
 			pstmt = conn.prepareStatement(sql);
-		
-			
+
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-			
+
 				BoardVo vo = new BoardVo();
 
 				list.add(vo);
@@ -302,6 +324,7 @@ public class BoardDao {
 			try {
 				if (conn != null)
 					conn.close();
+
 			} catch (SQLException e) {
 
 				e.printStackTrace();

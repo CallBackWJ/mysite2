@@ -35,7 +35,7 @@
 					<c:set var="count" value="${fn:length(list)}" />
 					<c:forEach items="${list}" var="vo" varStatus="status">
 						<tr>
-							<td>${count-status.index}</td>
+							<td>${((curPageNum-1)*5)+1+status.index}</td>
 							<td style="padding-left:${20*vo.depth}px;text-align:left">
 								<!--  img  src="${pageContext.servletContext.contextPath}/assets/images/reply.png"-->
 								<a
