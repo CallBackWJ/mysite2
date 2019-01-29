@@ -17,15 +17,10 @@ import com.douzon.mysite.action.user.UserActionFactory;
 @WebServlet("/user")
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	public UserServlet() {
-		super();
-	}
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.setCharacterEncoding("utf-8");
+		//request.setCharacterEncoding("utf-8");
 		AbstractActionFactory af = new UserActionFactory();
 
 		String actionName = request.getParameter("a");

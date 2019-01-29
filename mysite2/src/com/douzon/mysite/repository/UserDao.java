@@ -121,7 +121,6 @@ public class UserDao {
 				vo.setEmail(rs.getString(3));
 				vo.setPassword(rs.getString(4));
 				vo.setGender(rs.getString(5));
-				System.out.println(vo.getGender());
 			}
 			
 		} catch (SQLException e) {

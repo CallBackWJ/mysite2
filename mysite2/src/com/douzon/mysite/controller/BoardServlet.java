@@ -22,7 +22,7 @@ public class BoardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 		
-		request.setCharacterEncoding("utf-8");
+		//request.setCharacterEncoding("utf-8");
 		AbstractActionFactory af = new BoardActionFactory();
 
 		String actionName = request.getParameter("a");
