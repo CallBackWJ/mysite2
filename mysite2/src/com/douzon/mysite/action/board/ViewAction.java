@@ -18,10 +18,12 @@ public class ViewAction implements Action {
 		
 				BoardDao dao = new BoardDao();
 				long no = Long.parseLong(request.getParameter("no"));
+				long page = Long.parseLong(request.getParameter("page"));
 				BoardVo vo = dao.get(no);
 
 				// 데이터를 request범위에 저장
 				request.setAttribute("vo", vo);
+				request.setAttribute("page", page);
 
 				// 포워딩
 				WebUtils.forward(request, response, "/WEB-INF/views/board/view.jsp");

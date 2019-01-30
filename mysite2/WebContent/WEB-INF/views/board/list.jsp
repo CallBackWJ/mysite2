@@ -39,7 +39,7 @@
 							<td style="padding-left:${20*vo.depth}px;text-align:left">
 								<!--  img  src="${pageContext.servletContext.contextPath}/assets/images/reply.png"-->
 								<a
-								href="${pageContext.servletContext.contextPath}/board?a=view&no=${vo.no}">${vo.title }</a>
+								href="${pageContext.servletContext.contextPath}/board?a=view&no=${vo.no}&page=${curPageNum}">${vo.title }</a>
 							</td>
 							<td>${vo.user.name }</td>
 							<td>${vo.hit }</td>
@@ -60,7 +60,7 @@
 					<ul>
 
 						<c:if test="${ curPageNum > 5 }">
-							<li><a href="${pageContext.servletContext.contextPath}/board?page=${ blockStartNum - 1 }">◀</a></li>
+							<li><a href="${pageContext.servletContext.contextPath}/board?page=${ blockStartNum - 1 }&kwd=${kwd}">◀</a></li>
 						</c:if>
 						<c:forEach var="i" begin="${ blockStartNum }"
 							end="${ blockLastNum }">
@@ -72,13 +72,13 @@
 									<li class="selected">${ i }</li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="${pageContext.servletContext.contextPath}/board?page=${ i }">${ i }</a></li>
+									<li><a href="${pageContext.servletContext.contextPath}/board?page=${ i }&kwd=${kwd}">${ i }</a></li>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
 
 						<c:if test="${ lastPageNum > blockLastNum }">
-							<li><a href="${pageContext.servletContext.contextPath}/board?page=${ blockLastNum + 1 }">▶</a></li>
+							<li><a href="${pageContext.servletContext.contextPath}/board?page=${ blockLastNum + 1 }&kwd=${kwd}">▶</a></li>
 						</c:if>
 					</ul>
 				</div>

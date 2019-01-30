@@ -17,17 +17,22 @@ public class BoardListAction implements Action {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BoardDao dao = new BoardDao();
+		String kwd=request.getParameter("kwd");
 		String page=request.getParameter("page");
-		if(page==null)
-			page="1";
-		List<BoardVo> list = dao.getList(request.getParameter("kwd"),Long.parseLong(page));
+		if(page==null)page="1";
+		
+		
+		
+		List<BoardVo> list = dao.getList(kwd,Long.parseLong(page));
 
 		Paging paging=new Paging();
 		paging.makeBlock((int)Long.parseLong(page));
-		paging.makeLastPageNum();
+		paging.makeLastPageNum(dao.getCount(kwd));
 		Integer blockStartNum = paging.getBlockStartNum();
 		Integer blockLastNum = paging.getBlockLastNum();
 		Integer lastPageNum = paging.getLastPageNum();
+		
+		request.setAttribute("kwd", kwd);
 		request.setAttribute("curPageNum", (int)Long.parseLong(page));
 		request.setAttribute("blockStartNum", blockStartNum);
 		request.setAttribute("blockLastNum", blockLastNum);

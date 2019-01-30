@@ -33,7 +33,7 @@
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="${pageContext.servletContext.contextPath}/board">글목록</a>
+					<a href="${pageContext.servletContext.contextPath}/board?page=${page}">글목록</a>
 					<c:if test="${authuser.no == vo.user.no }">
 					<a href="${pageContext.servletContext.contextPath}/board?a=modifyform&no=${vo.no}">글수정</a>
 					</c:if>

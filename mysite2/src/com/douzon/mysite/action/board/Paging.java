@@ -1,6 +1,5 @@
 package com.douzon.mysite.action.board;
 
-import com.douzon.mysite.repository.BoardDao;
 
 public class Paging {
 
@@ -39,10 +38,8 @@ public class Paging {
 	  }
 	   
 	  // 총 페이지의 마지막 번호
-	  public void makeLastPageNum() {
-	    BoardDao dao = new BoardDao();
-	    int total = dao.getCount();
-	     
+	  public void makeLastPageNum(int total) {
+	  
 	    if( total % pageCount == 0 ) {
 	      lastPageNum = (int)Math.floor(total/pageCount);
 	    }

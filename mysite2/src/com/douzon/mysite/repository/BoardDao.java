@@ -297,15 +297,17 @@ public class BoardDao {
 		return result;
 	}
 
-	public int getCount() {
+	public int getCount(String kwd) {
 		List<BoardVo> list = new ArrayList<BoardVo>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs;
+		if (kwd == null)
+			kwd = "";
 
 		try {
 			conn = getConnection();
-			String sql = "select * from board";
+			String sql = "select * from board where title like '%" + kwd + "%' or contents like '%" + kwd+ "%'";
 			pstmt = conn.prepareStatement(sql);
 
 			rs = pstmt.executeQuery();
